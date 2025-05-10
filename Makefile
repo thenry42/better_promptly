@@ -30,6 +30,8 @@ clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 
+re: clean setup run
+
 # Help command
 help:
 	@echo "Available commands:"
@@ -38,3 +40,4 @@ help:
 	@echo "  make run-only - Run the Streamlit app (without setup)"
 	@echo "  make clean    - Remove virtual environment and cached files"
 	@echo "  make help     - Show this help message" 
+	@echo "  make re       - Clean, setup and run the Streamlit app"

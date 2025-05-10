@@ -7,17 +7,6 @@ def show_settings():
     st.header("Settings")
     st.write("Configure your AI settings here.")
     
-    # Initialize state from secrets if available
-    if 'api_keys' not in st.session_state:
-        st.session_state.api_keys = {
-            'openai': st.secrets.get("api_keys", {}).get("openai", ""),
-            'anthropic': st.secrets.get("api_keys", {}).get("anthropic", ""),
-            'google': st.secrets.get("api_keys", {}).get("google", ""),
-            'mistral': st.secrets.get("api_keys", {}).get("mistral", ""),
-            'deepseek': st.secrets.get("api_keys", {}).get("deepseek", ""),
-            'ollama_port': st.secrets.get("services", {}).get("ollama_port", "11434")
-        }
-    
     # Create text inputs with saved values
     st.session_state.api_keys['openai'] = st.text_input(
         "OpenAI API Key", 
@@ -54,10 +43,10 @@ def show_settings():
         key="deepseek_input"
     )
     
-    st.session_state.api_keys['ollama_port'] = st.text_input(
+    st.session_state.api_keys['ollama'] = st.text_input(
         "Ollama Port", 
-        value=st.session_state.api_keys['ollama_port'],
-        key="ollama_port_input"
+        value=st.session_state.api_keys['ollama'],
+        key="ollama_input"
     )
     
     st.write("")
