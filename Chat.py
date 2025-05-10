@@ -1,11 +1,4 @@
-import os
 import streamlit as st
-from dotenv import load_dotenv
-import openai
-import time
-
-# Load environment variables
-load_dotenv()
 
 def show_chat():
     st.header("Chat")
