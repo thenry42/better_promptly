@@ -22,11 +22,11 @@ def show_settings():
         key="anthropic_input"
     )
     
-    st.session_state.api_keys['google'] = st.text_input(
-        "Google API Key", 
-        value=st.session_state.api_keys['google'],
+    st.session_state.api_keys['gemini'] = st.text_input(
+        "Gemini API Key", 
+        value=st.session_state.api_keys['gemini'],
         type="password",
-        key="google_input"
+        key="gemini_input"
     )
     
     st.session_state.api_keys['mistral'] = st.text_input(
@@ -63,7 +63,7 @@ def show_settings():
     with col2:
         if st.button("Clear All Keys", key="clear_keys", use_container_width=True):
             for key in st.session_state.api_keys:
-                st.session_state.api_keys[key] = '' if key != 'ollama_port' else '11434'
+                st.session_state.api_keys[key] = '' if key != 'ollama' else '11434'
             update_secrets_file(st.session_state.api_keys)
             st.success("All API keys cleared!")
             st.rerun()
@@ -88,14 +88,10 @@ def update_secrets_file(api_keys):
         
         secrets["api_keys"]["openai"] = api_keys["openai"]
         secrets["api_keys"]["anthropic"] = api_keys["anthropic"]
-        secrets["api_keys"]["google"] = api_keys["google"]
+        secrets["api_keys"]["gemini"] = api_keys["gemini"]
         secrets["api_keys"]["mistral"] = api_keys["mistral"]
         secrets["api_keys"]["deepseek"] = api_keys["deepseek"]
-        
-        if "services" not in secrets:
-            secrets["services"] = {}
-        
-        secrets["services"]["ollama_port"] = api_keys["ollama_port"]
+        secrets["api_keys"]["ollama"] = api_keys["ollama"]
         
         # Write back to file
         with open(secrets_file, "w") as f:

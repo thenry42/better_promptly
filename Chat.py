@@ -41,8 +41,7 @@ def show_chat():
             st.session_state.chat_started = True
             st.session_state.selected_provider = provider
             st.session_state.selected_model = model
-            # Initialize with a system message
-            st.session_state.messages = [{"role": "system", "content": "You are a helpful assistant."}]
+            st.session_state.messages = []
         
         # Only show the button if provider and model are selected
         if provider and model:
@@ -93,7 +92,7 @@ def main():
         st.session_state.api_keys = {
             'openai': st.secrets.get("api_keys", {}).get("openai", ""),
             'anthropic': st.secrets.get("api_keys", {}).get("anthropic", ""),
-            'google': st.secrets.get("api_keys", {}).get("google", ""),
+            'gemini': st.secrets.get("api_keys", {}).get("gemini", ""),
             'mistral': st.secrets.get("api_keys", {}).get("mistral", ""),
             'deepseek': st.secrets.get("api_keys", {}).get("deepseek", ""),
             'ollama': st.secrets.get("api_keys", {}).get("ollama", "11434")
