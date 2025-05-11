@@ -1,5 +1,5 @@
 import streamlit as st
-from llms.llm import get_available_providers, get_available_models
+from llms.llm import get_available_providers, get_available_models, get_llm_response
 
 def show_chat():
     # Initialize chat state variables if they don't exist
@@ -11,6 +11,8 @@ def show_chat():
         st.session_state.selected_provider = None
     if 'selected_model' not in st.session_state:
         st.session_state.selected_model = None
+    if 'processing' not in st.session_state:
+        st.session_state.processing = False
     
     # If chat hasn't started, show provider/model selection
     if not st.session_state.chat_started:
@@ -56,28 +58,34 @@ def show_chat():
         for message in st.session_state.messages:
             if message["role"] != "system":  # Don't display system messages
                 with st.chat_message(message["role"]):
-                    st.write(message["content"])
-        
-        # Chat input
+                    st.markdown(message["content"])
+
+        # If we're currently processing a message, show the spinner
+        if st.session_state.processing:
+            with st.chat_message("assistant"):
+                with st.spinner("Thinking..."):
+                    # Get response from the selected LLM
+                    response = get_llm_response(
+                        st.session_state.selected_provider, 
+                        st.session_state.selected_model, 
+                        st.session_state.messages, 
+                        st.session_state.api_keys
+                    )
+                    # Add assistant response to history
+                    st.session_state.messages.append({"role": "assistant", "content": response})
+                    # Set processing to False
+                    st.session_state.processing = False
+                    # Force a rerun to display the new message
+                    st.rerun()
+                    
+        # Chat input for new messages
         if prompt := st.chat_input("Type your message here..."):
             # Add user message to history
             st.session_state.messages.append({"role": "user", "content": prompt})
-            
-            # Display user message
-            with st.chat_message("user"):
-                st.write(prompt)
-            
-            # Get AI response (placeholder - you'll need to implement the actual API call)
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    # This is where you'd call your LLM API based on selected provider/model
-                    # For now, just a placeholder
-                    response = f"This is a placeholder response. You need to implement the actual API call to {st.session_state.selected_provider}."
-                    st.write(response)
-            
-            # Add assistant response to history
-            st.session_state.messages.append({"role": "assistant", "content": response})
-
+            # Set processing to True
+            st.session_state.processing = True
+            # Force a rerun to display the new message and start processing
+            st.rerun()
 
 def main():
     # Initialize state from secrets if available
