@@ -7,3 +7,6 @@ anthropic
 mistralai
 google-generativeai
 google-genai
+toml
+psutil
+requests
